@@ -1,0 +1,18 @@
+<launch>
+
+  <arg name="spin_rate" default="500" />
+  <arg name="filter" default="15" />
+
+  <node name="left" pkg="force_sensor_ati" type="force_sensor_ati_node" output="screen" >
+    <param name="spin_rate" value="$(arg spin_rate)" />
+    <param name="port_id" value="1"/>
+    <param name="filter" value="$(arg filter)" />
+  </node>
+
+  <node name="right" pkg="force_sensor_ati" type="force_sensor_ati_node" output="screen" >
+    <param name="spin_rate" value="$(arg spin_rate)" />
+    <param name="port_id" value="2"/>
+    <param name="filter" value="$(arg filter)" />
+  </node>
+
+</launch>
