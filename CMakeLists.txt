@@ -132,6 +132,7 @@ include_directories(
 
 add_executable(force_sensor_ati_node src/force_sensor_ati_node.cpp)
 add_executable(example_ati src/example_ati.cpp)
+add_executable(merge_forces src/merge_forces.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
@@ -143,6 +144,9 @@ target_link_libraries(force_sensor_ati_node
 )
 target_link_libraries(example_ati
   ${catkin_LIBRARIES} -lOMD
+)
+target_link_libraries(merge_forces
+  ${catkin_LIBRARIES}
 )
 
 

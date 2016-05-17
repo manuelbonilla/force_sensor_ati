@@ -10,3 +10,12 @@ The command to launch the robot in simulation is :
 To set zeros on sensors just
 
   - rosservice call /left/setZeros std_srvs/Empty "{}"
+
+
+Steps
+
+  - Conect to kuka-platform network
+  - Open a terminal
+  - roslaunch force_sensor_ati force_sensor_ati.launch 
+  - Init on Matlab
+  - ruy simulink script

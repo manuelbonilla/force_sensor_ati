@@ -26,13 +26,13 @@ int main(int argc, char **argv)
 
     double spin_rate = 1000;
     ros::param::get("~spin_rate", spin_rate);
-    ROS_DEBUG( "Spin Rate %lf", spin_rate);
+    ROS_INFO( "Spin Rate %lf", spin_rate);
 
     ros::Rate rate(spin_rate);
 
     std::vector<ros::Publisher> pubs_forces;
 
-    int iSpeed = (int) spin_rate; // Speed in Hz
+    int iSpeed = 1000; // Speed in Hz
     int iFilter = 15;  // Filter in Hz
     int port_id = 0;
 
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
     nh.param<int>("port_id", port_id, 0);
     sensor_port = std::string("/dev/ttyACM") + std::to_string(port_id);
     nh.param<std::string>("on_topic", on_topic, "wrench");
-    
+
     nh.param<int>("filter", iFilter, 15);
 
     OptoPorts ports;
@@ -48,13 +48,11 @@ int main(int argc, char **argv)
     sleep(1.0);
 
     OPort* portlist = ports.listPorts(true);
-    std::string port_names(portlist[0].name);
-
 
     ROS_INFO_STREAM("Opening sensor on port: " << sensor_port.c_str());
     ROS_INFO_STREAM("Publishing force measurements on topic: " << on_topic.c_str());
 
-    if (daq.open(portlist[ port_id -1 ]))
+    if (daq.open(portlist[ port_id - 1 ]))
     {
         ROS_INFO_STREAM("Sensor Initialized on port " << sensor_port.c_str());
     }
@@ -76,8 +74,8 @@ int main(int argc, char **argv)
     bConfig = daq.sendConfig(sensorConfig);
     sleep(1.0);
     if (bConfig == false) {
-        ROS_ERROR_STREAM("Could not set config");
         daq.close();
+        ROS_ERROR_STREAM("Could not set config");
         ros::shutdown();
         return 0;
     }
@@ -101,12 +99,12 @@ int main(int argc, char **argv)
         geometry_msgs::WrenchStamped force_readings;
         std_msgs::Float64MultiArray allforces;
         size = daq.readAll(pack3D, false);
-        if (size ==  0)
+        if (size == 0)
             continue;
 
         for (int k = 0; k < number_of_sensor; k++)
         {
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < 1; i++)
             {
                 force_readings.wrench.force.x  = pack3D[k * size + i].x;
                 force_readings.wrench.force.y  = pack3D[k * size + i].y;
