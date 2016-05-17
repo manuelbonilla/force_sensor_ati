@@ -22,8 +22,6 @@ int main(int argc, char **argv)
 
     ros::Rate rate(spin_rate);
 
-    ros::Publisher pub_allforces = nh.advertise<std_msgs::Float64MultiArray>( "allforces", 1 );
-
     XmlRpc::XmlRpcValue my_list;
     nh.getParam("topics", my_list);
     ROS_ASSERT(my_list.getType() == XmlRpc::XmlRpcValue::TypeArray);
@@ -38,21 +36,26 @@ int main(int argc, char **argv)
         list_subs.push_back( nh.subscribe<std_msgs::Float64MultiArray>( static_cast<std::string>(my_list[i]).c_str(), 1, boost::bind(&callbackforce, _1, i) ) );
     }
 
-    while ( nh.ok() )
+    if (vec_allforces.size() > 0)
     {
-        std_msgs::Float64MultiArray allforces;
-        if (vec_allforces.size() > 0)
+        std::string on_topic;
+        nh.param<std::string>("on_topic", on_topic, "allforces");
+        ros::Publisher pub_allforces = nh.advertise<std_msgs::Float64MultiArray>( "allforces", 1 );
+
+        while ( nh.ok() )
         {
+            std_msgs::Float64MultiArray allforces;
+
             allforces.data = vec_allforces[0].data;
             for (unsigned int i = 1; i < vec_allforces.size(); ++i)
             {
                 allforces.data.insert(allforces.data.end(), vec_allforces[i].data.begin(), vec_allforces[i].data.end());
             }
-        }
 
-        pub_allforces.publish(allforces);
-        ros::spinOnce();
-        rate.sleep();
+            pub_allforces.publish(allforces);
+            ros::spinOnce();
+            rate.sleep();
+        }
     }
 
     return 0;
