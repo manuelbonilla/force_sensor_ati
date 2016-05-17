@@ -29,10 +29,6 @@ int main(int argc, char **argv)
 
     ros::Rate rate(spin_rate);
 
-    XmlRpc::XmlRpcValue my_list;
-    nh.getParam("topics", my_list);
-    ROS_ASSERT(my_list.getType() == XmlRpc::XmlRpcValue::TypeArray);
-
     ros::Subscriber sub_leftforces = nh.subscribe("/left/allforces", 1, callbackleft);
     ros::Subscriber sub_rightforces = nh.subscribe("/right/allforces", 1, callbackright);
 
