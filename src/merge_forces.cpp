@@ -2,10 +2,7 @@
 #include <ros/console.h>
 #include <std_msgs/Float64MultiArray.h>
 
-#include <unistd.h>
-#include <string>
 
-std_msgs::Float64MultiArray leftforces, rightforces;
 std::vector<std_msgs::Float64MultiArray> vec_allforces;
 
 void callbackforce(const std_msgs::Float64MultiArray::ConstPtr& msg, int i)
@@ -21,7 +18,7 @@ int main(int argc, char **argv)
 
     double spin_rate = 1000;
     ros::param::get("~spin_rate", spin_rate);
-    ROS_INFO( "Spin Rate %lf", spin_rate);
+    ROS_INFO_STREAM( "Spin Rate: " << spin_rate);
 
     ros::Rate rate(spin_rate);
 
@@ -35,11 +32,10 @@ int main(int argc, char **argv)
     for ( int i = 0; i < my_list.size(); ++i)
     {
         ROS_ASSERT(my_list[i].getType() == XmlRpc::XmlRpcValue::TypeString);
-        ROS_INFO_STREAM("Mering topic: " <<  static_cast<std::string>(my_list[i]).c_str());
+        ROS_INFO_STREAM("Merging topic: " <<  static_cast<std::string>(my_list[i]).c_str());
         std_msgs::Float64MultiArray new_forces;
         vec_allforces.push_back( new_forces );
         list_subs.push_back( nh.subscribe<std_msgs::Float64MultiArray>( static_cast<std::string>(my_list[i]).c_str(), 1, boost::bind(&callbackforce, _1, i) ) );
-
     }
 
     while ( nh.ok() )
