@@ -89,10 +89,10 @@ int main(int argc, char **argv)
 
     int number_of_sensor = daq.getSensorSize();
     for (unsigned i = 0; i < number_of_sensor; ++i) {
-        pubs_forces.push_back( nh.advertise<geometry_msgs::WrenchStamped>( on_topic.c_str() + std::to_string(i), 1 ));
+        pubs_forces.push_back( nh.advertise<geometry_msgs::WrenchStamped>( on_topic.c_str() + std::to_string(i), 100 ));
     }
 
-    ros::Publisher pub_allforces = nh.advertise<std_msgs::Float64MultiArray>( "allforces", 1 );
+    ros::Publisher pub_allforces = nh.advertise<std_msgs::Float64MultiArray>( "allforces", 100 );
 
     while (nh.ok())
     {

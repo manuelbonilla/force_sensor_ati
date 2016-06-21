@@ -16,10 +16,13 @@
   </node>
 
   <arg name="yamlFile" default="$(find force_sensor_ati)/conf/config.yaml"/>
+
+  <arg name="file_results" default="results.txt"/>
  
   <node name="forces" pkg="force_sensor_ati" type="merge_forces" output="screen">
     <param name="spin_rate" value="$(arg spin_rate)" />
     <rosparam command="load" file="$(arg yamlFile)"/>
+    <param name="file_results" value="$(arg file_results)" />
   </node>
 
 
